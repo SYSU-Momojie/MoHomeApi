@@ -1,0 +1,10 @@
+server:
+  port: 9874
+  tomcat:
+    basedir: ${MQ_TEMP_FILE_PATH}
+  servlet:
+    context-path: /mq_api
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8

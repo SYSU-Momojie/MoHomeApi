@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.momojie.blog.dao.BlogArticleDao">
+    <insert id="add" parameterType="com.cn.momojie.blog.vo.BlogArticle"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog_article
+        (type, title, content, created_by, updated_by)
+        VALUES
+        (#{type}, #{title}, #{content}, #{createdBy}, #{createdBy})
+    </insert>
+
+    <update id="updateById" parameterType="com.cn.momojie.blog.param.ArticleParam">
+        UPDATE blog_article
+        SET
+          type = #{type},
+          title = #{title},
+          content = #{content},
+          updated_by = #{updatedBy}
+        WHERE
+          id = #{id}
+    </update>
+
+    <select id="getMaxId" resultType="java.lang.Long">
+        SELECT MAX(id)
+        FROM blog_article
+        WHERE created_by = #{user}
+    </select>
+
+    <select id="selectByParam" parameterType="com.cn.momojie.blog.param.ArticleParam"
+            resultType="com.cn.momojie.blog.vo.BlogArticle">
+        SELECT
+          id AS id,
+          type AS type,
+          title AS title,
+          content AS content,
+          created_time AS createdTime,
+          created_by AS createdBy,
+          updated_time AS updatedTime,
+          updated_by AS updatedBy
+        FROM blog_article
+        WHERE
+          1=1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="type != null">
+          AND type = #{type}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.momojie.blog.dao.GalleryDao">
+
+    <select id="getGroups" resultType="com.cn.momojie.blog.vo.GalleryGroupVo">
+        SELECT * FROM gallery_group
+    </select>
+
+    <select id="getGroupByCode" resultType="com.cn.momojie.blog.vo.GalleryGroupVo">
+        SELECT * FROM gallery_group
+        WHERE code = #{code}
+    </select>
+
+    <insert id="addGalleryPic" parameterType="com.cn.momojie.blog.vo.GalleryPicVo">
+        INSERT INTO gallery_pic
+        (group_code, file_name)
+        VALUES
+        (#{groupCode}, #{fileName})
+    </insert>
+
+</mapper>
