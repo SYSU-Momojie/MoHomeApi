@@ -3,7 +3,7 @@ server:
   tomcat:
     basedir: ${MQ_TEMP_FILE_PATH}
   servlet:
-    context-path: /mq_api
+    context-path: /quant
 spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

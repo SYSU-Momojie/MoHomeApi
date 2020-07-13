@@ -1,7 +1,7 @@
 server:
   port: 9871
   servlet:
-    context-path: /api
+    context-path: /blog
 spring:
   servlet:
     multipart:

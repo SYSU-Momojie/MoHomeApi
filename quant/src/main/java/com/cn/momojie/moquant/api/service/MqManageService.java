@@ -126,7 +126,7 @@ public class MqManageService {
 		if (codeDateMap.size() > 0) {
 			return OperationResp.ok("导入成功", codeDateMap);
 		} else {
-			return OperationResp.fail("导入失败", null);
+			return OperationResp.fail("导入失败: " + sb.toString(), null);
 		}
 	}
 
@@ -156,25 +156,25 @@ public class MqManageService {
 			} else if (mi.getPeriod().length() != 6 && mi.getPeriod().length() != 8) {
 				row.append("不合法的报告期;");
 			} else if (mi.getPeriod().length() == 6) {
-				if (mi.getUpdateDate().endsWith("Q1")) {
-					mi.setUpdateDate(mi.getUpdateDate().substring(0, 4) + "0331");
-				} else if(mi.getUpdateDate().endsWith("Q2")) {
-					mi.setUpdateDate(mi.getUpdateDate().substring(0, 4) + "0630");
-				} else if (mi.getUpdateDate().endsWith("Q3")) {
-					mi.setUpdateDate(mi.getUpdateDate().substring(0, 4) + "0930");
-				} else if (mi.getUpdateDate().endsWith("Q4")) {
-					mi.setUpdateDate(mi.getUpdateDate().substring(0, 4) + "1231");
+				if (mi.getPeriod().endsWith("Q1")) {
+					mi.setPeriod(mi.getUpdateDate().substring(0, 4) + "0331");
+				} else if(mi.getPeriod().endsWith("Q2")) {
+					mi.setPeriod(mi.getUpdateDate().substring(0, 4) + "0630");
+				} else if (mi.getPeriod().endsWith("Q3")) {
+					mi.setPeriod(mi.getUpdateDate().substring(0, 4) + "0930");
+				} else if (mi.getPeriod().endsWith("Q4")) {
+					mi.setPeriod(mi.getUpdateDate().substring(0, 4) + "1231");
 				}
 				try {
-					updateDate.parse(mi.getUpdateDate());
+					updateDate.parse(mi.getPeriod());
 				} catch (ParseException e) {
 					row.append("不合法的报告期;");
 				}
 			} else {
 				try {
-					updateDate.parse(mi.getUpdateDate());
-					if (!(mi.getUpdateDate().endsWith("0331") || mi.getUpdateDate().endsWith("0630") ||
-							mi.getUpdateDate().endsWith("0930") || mi.getUpdateDate().endsWith("1231")
+					updateDate.parse(mi.getPeriod());
+					if (!(mi.getPeriod().endsWith("0331") || mi.getPeriod().endsWith("0630") ||
+							mi.getPeriod().endsWith("0930") || mi.getPeriod().endsWith("1231")
 					)) {
 						row.append("不合法的报告期;");
 					}

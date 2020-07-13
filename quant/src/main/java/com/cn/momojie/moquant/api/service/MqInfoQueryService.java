@@ -17,7 +17,7 @@ import com.cn.momojie.moquant.api.dto.ts.TsBasic;
 import com.cn.momojie.moquant.api.dto.ts.TsForecast;
 import com.cn.momojie.moquant.api.param.*;
 import com.cn.momojie.utils.DateTimeUtils;
-import com.cn.momojie.utils.PinYinUtil;
+import com.cn.momojie.utils.PinYinUtils;
 import com.cn.momojie.moquant.api.vo.*;
 import com.github.pagehelper.PageHelper;
 
@@ -243,7 +243,7 @@ public class MqInfoQueryService {
 			ShareListItem ret = new ShareListItem();
 			ret.setTsCode(i.getTsCode());
 			ret.setName(i.getName());
-			ret.setPy(PinYinUtil.convertToPyFirst(i.getName()));
+			ret.setPy(PinYinUtils.convertToPyFirst(i.getName()));
 			return ret;
 		}).collect(Collectors.toList());
 	}

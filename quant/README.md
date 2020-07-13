@@ -9,4 +9,4 @@ Key|Value|Desc
 |BLOG_DB_SCHEMA|xxx|所用database|
 |DB_USER|root|mysql 用户|
 |DB_PWD|password|mysql 密码|
-|BLOG_IMAGE_DIR|/your-path/images|保存图片路径|
+|MQ_SCRIPT_DIR|/your-path|python脚本位置|

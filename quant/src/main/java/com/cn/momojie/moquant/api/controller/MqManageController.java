@@ -15,8 +15,10 @@ import com.cn.momojie.moquant.api.constant.MqExcelConst;
 import com.cn.momojie.moquant.api.dto.MqManualIndicator;
 import com.cn.momojie.moquant.api.param.manage.NoteEditParam;
 import com.cn.momojie.moquant.api.service.MqManageService;
+import com.cn.momojie.moquant.api.service.MqScriptService;
 import com.cn.momojie.moquant.api.vo.OperationResp;
 import com.cn.momojie.utils.ExcelUtils;
+import com.cn.momojie.utils.ThreadPoolUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +29,9 @@ public class MqManageController {
 
 	@Autowired
 	private MqManageService manageService;
+
+	@Autowired
+	private MqScriptService scriptService;
 
 	@RequestMapping(path = "/addNote", method = RequestMethod.POST)
 	public OperationResp addNote(@RequestBody NoteEditParam input) {
@@ -50,14 +55,17 @@ public class MqManageController {
 			OperationResp<Map<String, String>> importResult = manageService.manualInput(inputList);
 
 			if (importResult.getSuccess()) {
-
+				ThreadPoolUtils.getServicePool().submit(() -> {
+					Map<String, String> codeDateMap = importResult.getData();
+					scriptService.recalculateFrom(codeDateMap);
+					log.info("人工录入后重算成功 个数: {}", codeDateMap.size());
+				});
 			}
+
+			return importResult;
 		} catch (Exception e) {
 			log.error("上传文件解析失败", e);
 			return OperationResp.fail("上传文件解析失败", null);
 		}
-
-
-
 	}
 }
