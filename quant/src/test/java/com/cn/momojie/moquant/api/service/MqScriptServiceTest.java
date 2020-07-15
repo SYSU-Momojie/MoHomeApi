@@ -1,18 +1,21 @@
 package com.cn.momojie.moquant.api.service;
 
+import com.cn.momojie.moquant.api.SpringBaseTest;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class MqScriptServiceTest {
+import java.util.HashMap;
+import java.util.Map;
 
-    private MqScriptService getService() {
-        MqScriptService service = new MqScriptService();
-        return service;
-    }
+public class MqScriptServiceTest extends SpringBaseTest {
+
+    @Autowired
+    private MqScriptService service;
 
     @Test
-    public void testRecalculate() {
-        MqScriptService service = getService();
-        String path = System.getenv("MQ_SCRIPT_DIR");
-        service.recalculateFrom(path, "000001.SZ", "20200701");
+    public void testRecalculate() throws InterruptedException {
+        Map<String, String> m = new HashMap<>();
+        m.put("000001.SZ", "20200701");
+        service.recalculateFrom(m);
     }
 }

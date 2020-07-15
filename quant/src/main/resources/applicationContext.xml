@@ -33,8 +33,9 @@
         <property name="basePackage" value="com.cn.momojie.moquant.api.dao"/>
     </bean>
 
-    <bean class="com.cn.momojie.moquant.api.config.MqPythonConfig">
+    <bean class="com.cn.momojie.moquant.api.config.MqPythonConfig" id="mqPythonConfig">
         <property name="mqScriptDir" value="${MQ_SCRIPT_DIR}" />
+        <property name="pyBin" value="${PYTHON}"/>
     </bean>
 
 </beans>

@@ -6,9 +6,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.cn.momojie.moquant.api.config.MqPythonConfig;
@@ -21,24 +23,36 @@ import lombok.extern.slf4j.Slf4j;
 public class MqScriptService {
 
 	@Autowired
+	@Qualifier("mqPythonConfig")
 	private MqPythonConfig pythonConfig;
 
 	public void recalculateFrom(Map<String, String> codeDateMap) {
-		String scriptPath = pythonConfig.getMqScriptDir();
+		List<Future> resultList = new ArrayList<>();
 		for (String tsCode: codeDateMap.keySet()) {
 			String dt = codeDateMap.get(tsCode);
-			ThreadPoolUtils.getPythonPool().execute(() -> recalculateFrom(scriptPath, tsCode, dt));
+			resultList.add(ThreadPoolUtils.getPythonPool().submit(() -> recalculateFrom(tsCode, dt)));
+		}
+		for (Future f: resultList) {
+			try {
+				f.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	protected void recalculateFrom(String scriptPath, String tsCode, String fromDate) {
+	protected int recalculateFrom( String tsCode, String fromDate) {
+		String python = pythonConfig.getPyBin();
+		String scriptPath = pythonConfig.getMqScriptDir();
 		File runPythonFile = new File(scriptPath, "run.py");
-		String command = String.format("python %s --job recalculate --code %s --from-date %s",
-				runPythonFile.getAbsolutePath(), tsCode, fromDate);
-		commonExecute(command);
+		String command = String.format("%s %s --job recalculate --code %s --from-date %s",
+				python, runPythonFile.getAbsolutePath(), tsCode, fromDate);
+		return commonExecute(command);
 	}
 
-	private void commonExecute(String command) {
+	private int commonExecute(String command) {
 		log.info("执行脚本命令 {}", command);
 		try {
 			Process proc = Runtime.getRuntime().exec(command);
@@ -51,8 +65,10 @@ public class MqScriptService {
 			in.close();
 			int r = proc.waitFor();
 			log.info("执行脚本结果 {}", r);
+			return r;
 		} catch (Exception e) {
 			log.error("执行脚本失败", e);
 		}
+		return 1;
 	}
 }
