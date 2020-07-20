@@ -11,9 +11,15 @@ import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.cn.momojie.moquant.api.config.MqPythonConfig;
+import com.cn.momojie.redis.client.RedisClient;
+import com.cn.momojie.redis.config.LettuceConfig;
+import com.cn.momojie.utils.DateTimeUtils;
 import com.cn.momojie.utils.ThreadPoolUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +29,24 @@ import lombok.extern.slf4j.Slf4j;
 public class MqScriptService {
 
 	@Autowired
+	private RedisClient redisClient;
+
+	@Autowired
 	@Qualifier("mqPythonConfig")
 	private MqPythonConfig pythonConfig;
+
+	public int dailyUpdate() {
+		Boolean flag = redisClient.setNX("fetch_daily", "1", 3600 * 4);
+		if (!flag) {
+			log.error("fetch_daily获取锁失败");
+			return 0;
+		}
+		String dt = DateTimeUtils.getTodayDt();
+		String args = String.format("--job fetch_daily --date %s", dt);
+		int r = commonExecute(args);
+		redisClient.del("fetch_daily");
+		return r;
+	}
 
 	public void recalculateFrom(Map<String, String> codeDateMap) {
 		List<Future> resultList = new ArrayList<>();
@@ -43,16 +65,16 @@ public class MqScriptService {
 		}
 	}
 
-	protected int recalculateFrom( String tsCode, String fromDate) {
+	protected int recalculateFrom(String tsCode, String fromDate) {
+		String args = String.format("--job recalculate --code %s --from-date %s", tsCode, fromDate);
+		return commonExecute(args);
+	}
+
+	private int commonExecute(String args) {
 		String python = pythonConfig.getPyBin();
 		String scriptPath = pythonConfig.getMqScriptDir();
 		File runPythonFile = new File(scriptPath, "run.py");
-		String command = String.format("%s %s --job recalculate --code %s --from-date %s",
-				python, runPythonFile.getAbsolutePath(), tsCode, fromDate);
-		return commonExecute(command);
-	}
-
-	private int commonExecute(String command) {
+		String command = String.format("%s %s %s", python, runPythonFile.getAbsolutePath(), args);
 		log.info("执行脚本命令 {}", command);
 		try {
 			Process proc = Runtime.getRuntime().exec(command);

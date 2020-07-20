@@ -19,6 +19,7 @@
 	<modules>
 		<module>quant</module>
 		<module>blog</module>
+        <module>redis</module>
         <module>utils</module>
 	</modules>
 

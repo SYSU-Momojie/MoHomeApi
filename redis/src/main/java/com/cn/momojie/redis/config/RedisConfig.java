@@ -1,4 +1,4 @@
-package com.cn.momojie.blog.config;
+package com.cn.momojie.redis.config;
 
 import lombok.Data;
 
