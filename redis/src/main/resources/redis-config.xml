@@ -5,12 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="redisConfig" class="com.cn.momojie.redis.config.RedisConfig">
-        <property name="hostName" value="${REDIS_HOST}"/>
-        <property name="port" value="${REDIS_PORT}"/>
-        <property name="password" value="${REDIS_PWD}"/>
-    </bean>
-
     <context:component-scan base-package="com.cn.momojie.redis"/>
 
 </beans>

@@ -7,10 +7,8 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <context:component-scan base-package="com.cn.momojie.moquant.api"/>
-
     <import resource="classpath:redis-config.xml"/>
     <import resource="classpath:secretConfig.xml"/>
-
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -35,7 +33,7 @@
     </bean>
 
     <bean class="com.cn.momojie.moquant.api.config.MqPythonConfig" id="mqPythonConfig">
-        <property name="mqScriptDir" value="${MQ_SCRIPT_DIR}" />
+        <property name="mqScriptDir" value="${MQ_SCRIPT_DIR}"/>
         <property name="pyBin" value="${PYTHON}"/>
     </bean>
 
