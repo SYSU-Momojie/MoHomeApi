@@ -1,5 +1,14 @@
 package com.cn.momojie.moquant.api.service;
 
+import com.cn.momojie.moquant.api.config.MqPythonConfig;
+import com.cn.momojie.redis.client.RedisClient;
+import com.cn.momojie.utils.DateTimeUtils;
+import com.cn.momojie.utils.ThreadPoolUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -8,21 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-import com.cn.momojie.moquant.api.config.MqPythonConfig;
-import com.cn.momojie.redis.client.RedisClient;
-import com.cn.momojie.redis.config.LettuceConfig;
-import com.cn.momojie.utils.DateTimeUtils;
-import com.cn.momojie.utils.ThreadPoolUtils;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

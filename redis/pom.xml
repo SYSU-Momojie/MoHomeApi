@@ -5,6 +5,7 @@
 
     <groupId>com.cn.momojie</groupId>
     <artifactId>mo-redis</artifactId>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.cn.momojie</groupId>
