@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.cn.momojie.basic.vo.PageResult;
 import com.cn.momojie.moquant.api.constant.MqIndicatorEnum;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,7 +46,7 @@ public class MqInfoQueryService {
     @Autowired
     private MqMessageDao messageDao;
 
-    public PageResult getLatestListByOrder(MqDailyBasicParam param) {
+    public PageResult getLatestListByOrder(DailyBasicParam param) {
         return null;
     }
 
@@ -248,7 +249,7 @@ public class MqInfoQueryService {
 		}).collect(Collectors.toList());
 	}
 
-	public PageResult<MqShareNoteVo> getNotes(MqCodePageParam param) {
+	public PageResult<MqShareNoteVo> getNotes(CodePageParam param) {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		if ("all".equals(param.getTsCode())) {
 			param.setTsCode(null);
@@ -322,7 +323,7 @@ public class MqInfoQueryService {
 		return info;
 	}
 
-	public PageResult<MqMessage> getLatestReportList(MqMessageParam param) {
+	public PageResult<MqMessage> getLatestReportList(MessageParam param) {
 		PageHelper.startPage(param.getPageNum(), param.getPageSize());
 		return PageResult.fromList(messageDao.getLatestByType(param.getMsgType()));
 	}

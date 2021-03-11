@@ -19,7 +19,7 @@ import com.cn.momojie.moquant.api.dto.MqManualIndicator;
 import com.cn.momojie.moquant.api.dto.MqShareNote;
 import com.cn.momojie.moquant.api.dto.MqShareNoteRelation;
 import com.cn.momojie.moquant.api.param.manage.NoteEditParam;
-import com.cn.momojie.moquant.api.vo.OperationResp;
+import com.cn.momojie.basic.vo.OperationResp;
 
 import lombok.extern.slf4j.Slf4j;
 

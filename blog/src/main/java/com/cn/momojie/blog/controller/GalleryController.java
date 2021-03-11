@@ -1,13 +1,12 @@
 package com.cn.momojie.blog.controller;
 
-import com.cn.momojie.blog.constant.MsgCode;
+import com.cn.momojie.basic.constant.MsgCode;
 import com.cn.momojie.blog.dao.GalleryDao;
 import com.cn.momojie.blog.vo.GalleryGroupVo;
 import com.cn.momojie.blog.vo.GalleryPicVo;
-import com.cn.momojie.blog.vo.MessageResult;
+import com.cn.momojie.basic.vo.MessageResult;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;

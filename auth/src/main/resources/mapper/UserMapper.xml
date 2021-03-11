@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.momojie.auth.dao.UserDao">
+
+    <select id="getAuths" resultType="java.lang.String">
+      SELECT auth
+      FROM role_auth ra
+      WHERE role IN
+      (
+      SELECT role FROM user_role
+      WHERE name = #{name}
+      )
+    </select>
+
+    <select id="getRoles" resultType="java.lang.String">
+      SELECT role FROM user_role
+      WHERE name = #{name}
+    </select>
+
+</mapper>

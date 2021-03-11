@@ -13,14 +13,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>2.4.3</version>
     </parent>
 
 	<modules>
+        <module>basic</module>
+        <module>es</module>
 		<module>quant</module>
 		<module>blog</module>
         <module>redis</module>
         <module>utils</module>
+        <module>auth</module>
+        <module>app</module>
 	</modules>
 
     <properties>
@@ -114,6 +118,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
 

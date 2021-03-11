@@ -1,11 +1,10 @@
 package com.cn.momojie.blog.controller;
 
-import com.cn.momojie.blog.SessionUtil;
-import com.cn.momojie.blog.constant.MsgCode;
+import com.cn.momojie.basic.constant.MsgCode;
 import com.cn.momojie.blog.dao.BlogArticleDao;
 import com.cn.momojie.blog.param.ArticleParam;
 import com.cn.momojie.blog.vo.BlogArticle;
-import com.cn.momojie.blog.vo.MessageResult;
+import com.cn.momojie.basic.vo.MessageResult;
 import com.cn.momojie.blog.vo.PageModel;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,8 +25,7 @@ public class ArticleController {
     @ResponseBody
     public MessageResult<Long> postArticle(@RequestBody BlogArticle art) {
         MessageResult<Long> result = new MessageResult<>();
-        String user = SessionUtil.getUserName();
-        art.setCreatedBy(user);
+        art.setCreatedBy("");
         Long callbackId = null;
         if (art.getId() == null) {
             articleDao.add(art);

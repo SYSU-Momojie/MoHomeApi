@@ -1,6 +1,5 @@
 package com.cn.momojie.utils;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -46,5 +45,13 @@ public class DateTimeUtils {
     		log.error("Fail to convert period to xxxxQx. {}", period);
 		}
     	return null;
+	}
+
+	public static Long getCurrentTimestamp() {
+    	return Calendar.getInstance().getTimeInMillis();
+	}
+
+	public static String getCurrentTimestampStr() {
+		return String.valueOf(Calendar.getInstance().getTimeInMillis());
 	}
 }

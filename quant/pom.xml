@@ -16,6 +16,12 @@
 
         <dependency>
             <groupId>com.cn.momojie</groupId>
+            <artifactId>mo-basic</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cn.momojie</groupId>
             <artifactId>mo-utils</artifactId>
             <version>${parent.version}</version>
         </dependency>

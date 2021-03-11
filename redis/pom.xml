@@ -5,7 +5,6 @@
 
     <groupId>com.cn.momojie</groupId>
     <artifactId>mo-redis</artifactId>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.cn.momojie</groupId>
@@ -14,6 +13,7 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>

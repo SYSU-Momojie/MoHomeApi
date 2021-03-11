@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cn.momojie.moquant.api.SpringBaseTest;
-import com.cn.momojie.moquant.api.param.MqCodePageParam;
-import com.cn.momojie.moquant.api.vo.PageResult;
+import com.cn.momojie.moquant.api.param.CodePageParam;
+import com.cn.momojie.basic.vo.PageResult;
 
 public class MqInfoQueryServiceTest extends SpringBaseTest {
 
@@ -15,7 +15,7 @@ public class MqInfoQueryServiceTest extends SpringBaseTest {
 
 	@Test
 	public void testNote() {
-		MqCodePageParam param = new MqCodePageParam();
+		CodePageParam param = new CodePageParam();
 		param.setTsCode("000055.SZ");
 		PageResult result = service.getNotes(param);
 		Assert.assertTrue(result.getTotal() > 0);

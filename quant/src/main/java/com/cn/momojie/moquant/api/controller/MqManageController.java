@@ -16,7 +16,7 @@ import com.cn.momojie.moquant.api.dto.MqManualIndicator;
 import com.cn.momojie.moquant.api.param.manage.NoteEditParam;
 import com.cn.momojie.moquant.api.service.MqManageService;
 import com.cn.momojie.moquant.api.service.MqScriptService;
-import com.cn.momojie.moquant.api.vo.OperationResp;
+import com.cn.momojie.basic.vo.OperationResp;
 import com.cn.momojie.utils.ExcelUtils;
 import com.cn.momojie.utils.ThreadPoolUtils;
 

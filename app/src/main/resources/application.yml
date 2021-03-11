@@ -1,0 +1,19 @@
+server:
+  port: 9871
+  servlet:
+    context-path: /api
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  profiles:
+    include: es
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.cn.momojie: INFO

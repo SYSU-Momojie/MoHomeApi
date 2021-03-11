@@ -1,9 +1,10 @@
 package com.cn.momojie.moquant.api.controller;
 
+import com.cn.momojie.basic.vo.PageResult;
 import com.cn.momojie.moquant.api.dto.MqShareAll;
-import com.cn.momojie.moquant.api.param.MqCodePageParam;
-import com.cn.momojie.moquant.api.param.MqDailyBasicParam;
-import com.cn.momojie.moquant.api.param.MqMessageParam;
+import com.cn.momojie.moquant.api.param.CodePageParam;
+import com.cn.momojie.moquant.api.param.DailyBasicParam;
+import com.cn.momojie.moquant.api.param.MessageParam;
 import com.cn.momojie.moquant.api.param.MqShareListParam;
 import com.cn.momojie.moquant.api.param.MqTrendParam;
 import com.cn.momojie.moquant.api.service.MqInfoQueryService;
@@ -24,7 +25,7 @@ public class MqStockController {
     private MqInfoQueryService mqInfoQueryService;
 
     @RequestMapping(path = "getPageList", method = RequestMethod.POST)
-    public PageResult getPageList(@RequestBody MqDailyBasicParam param) {
+    public PageResult getPageList(@RequestBody DailyBasicParam param) {
         return mqInfoQueryService.getLatestListByOrder(param);
     }
 
@@ -54,7 +55,7 @@ public class MqStockController {
     }
 
     @RequestMapping(path = "getNoteList", method = RequestMethod.POST)
-    public PageResult getNoteList(@RequestBody MqCodePageParam param) {
+    public PageResult getNoteList(@RequestBody CodePageParam param) {
         return mqInfoQueryService.getNotes(param);
     }
 
@@ -69,7 +70,7 @@ public class MqStockController {
 	}
 
 	@RequestMapping(path = "getLatestReportList", method = RequestMethod.POST)
-	public PageResult getLatestReportList(@RequestBody MqMessageParam param) {
+	public PageResult getLatestReportList(@RequestBody MessageParam param) {
     	return mqInfoQueryService.getLatestReportList(param);
 	}
 }

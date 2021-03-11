@@ -16,25 +16,9 @@
     <dependencies>
         <dependency>
             <groupId>com.cn.momojie</groupId>
-            <artifactId>mo-redis</artifactId>
+            <artifactId>mo-basic</artifactId>
             <version>${parent.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

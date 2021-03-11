@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:component-scan base-package="com.cn.momojie.auth"/>
+
+    <import resource="classpath:redis-config.xml"/>
+    <import resource="classpath:mysql.xml" />
+
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="authTm">
+        <property name="dataSource" ref="authDS" />
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="authSf">
+        <property name="dataSource" ref="authDS" />
+        <property name="mapperLocations" value="classpath*:mapper/*Mapper.xml" />
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>helperDialect=mysql</value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="authMs">
+        <property name="sqlSessionFactoryBeanName" value="authSf"/>
+        <property name="basePackage" value="com.cn.momojie.auth.dao"/>
+    </bean>
+</beans>
