@@ -40,7 +40,7 @@ public class MoTalkSentenceController {
 	public OperationResp addSentence(@RequestBody MoTalkSentence input) {
 		try {
 			input.setId(null);
-			input.setLike(1);
+			input.setLike(0);
 			if (input.getLabels() == null) {
 				input.setLabels(new ArrayList<>());
 			}
