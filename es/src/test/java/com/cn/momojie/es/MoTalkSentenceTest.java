@@ -59,6 +59,7 @@ public class MoTalkSentenceTest extends BaseTest {
 		List<MoTalkSentence> ssl = gsp.getContent();
 		Assert.assertEquals(Integer.valueOf(2), ssl.get(0).getLike());
 		Assert.assertEquals("这只是一个非常简单简单的句子", ssl.get(1).getContent());
+		searchAndDelete();
 	}
 
 	@Test
@@ -75,5 +76,6 @@ public class MoTalkSentenceTest extends BaseTest {
 		Assert.assertEquals(1, gsp.getNumberOfElements());
 		ssl = gsp.getContent();
 		Assert.assertEquals("这只是一个非常简单简单的句子", ssl.get(0).getContent());
+		searchAndDelete();
 	}
 }

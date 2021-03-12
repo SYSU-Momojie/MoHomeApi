@@ -16,6 +16,12 @@
 
         <dependency>
             <groupId>com.cn.momojie</groupId>
+            <artifactId>mo-auth</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cn.momojie</groupId>
             <artifactId>mo-es</artifactId>
             <version>${parent.version}</version>
         </dependency>

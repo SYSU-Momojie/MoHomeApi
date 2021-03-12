@@ -4,9 +4,14 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+import com.cn.momojie.auth.dto.UserDto;
+import com.cn.momojie.auth.param.UserParam;
+
 public interface UserDao {
 
-    List<String> getRoles(@Param("name") String name);
+	void create(UserDto user);
 
-    List<String> getAuths(@Param("name") String name);
+	UserDto getUser(UserParam param);
+
+    List<String> getRoles(@Param("name") String name);
 }

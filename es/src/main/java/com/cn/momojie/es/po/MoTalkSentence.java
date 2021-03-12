@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import lombok.Data;
 
 @Data
-@Document(indexName = "sentence")
+@Document(indexName = "motalk_sentence")
 public class MoTalkSentence {
 
 	@Id

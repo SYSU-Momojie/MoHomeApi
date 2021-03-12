@@ -1,6 +1,8 @@
 package com.cn.momojie.es;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +16,21 @@ public class MoTalkLabelTeset extends BaseTest {
 	private MoTalkLabelRepo lr;
 
 	@Test
+	public void removeAll() {
+		lr.deleteAll();
+	}
+
+	@Test
 	public void add() {
-		MoTalkLabel l1 = new MoTalkLabel();
-		l1.setLabel("全部");
+		removeAll();
 
-		MoTalkLabel l2 = new MoTalkLabel();
-		l2.setLabel("搞笑");
+		String[] all = {"全部", "搞笑", "情话", "怼人", "装傻", "其他"};
+		List<MoTalkLabel> labels = Arrays.stream(all).map(i -> {
+			MoTalkLabel l1 = new MoTalkLabel();
+			l1.setLabel(i);
+			return l1;
+		}).collect(Collectors.toList());
 
-		MoTalkLabel l3 = new MoTalkLabel();
-		l3.setLabel("情话");
-
-		MoTalkLabel l4 = new MoTalkLabel();
-		l4.setLabel("其他");
-
-		lr.saveAll(Arrays.asList(l1, l2, l3, l4));
+		lr.saveAll(labels);
 	}
 }

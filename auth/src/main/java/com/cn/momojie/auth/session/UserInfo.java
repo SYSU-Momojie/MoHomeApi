@@ -12,7 +12,8 @@ public class UserInfo {
 
     private String name = "";
 
+    private String wxId;
+
     private List<String> roles = new LinkedList<>();
 
-    private List<String> auths = new LinkedList<>();
 }

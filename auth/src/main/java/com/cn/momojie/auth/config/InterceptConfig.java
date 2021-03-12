@@ -14,17 +14,10 @@ import com.cn.momojie.auth.interceptor.UserInitInterceptor;
 public class InterceptConfig implements WebMvcConfigurer {
 
 	@Autowired
-	private AdminInterceptor adminI;
-
-	@Autowired
 	private UserInitInterceptor userInitI;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		InterceptorRegistration admin = registry.addInterceptor(adminI);
-		admin.addPathPatterns("/gallery/upload", "/article/post");
-		admin.order(1);
-
 		InterceptorRegistration init = registry.addInterceptor(userInitI);
 		init.addPathPatterns("/**");
 		init.order(0);

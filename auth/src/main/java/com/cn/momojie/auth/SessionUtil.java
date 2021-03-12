@@ -28,9 +28,4 @@ public class SessionUtil {
         UserInfo info = get();
         return info != null && info.getRoles().contains("admin");
     }
-
-    public static Boolean hasAuth(String auth) {
-        UserInfo info = get();
-        return info != null && info.getAuths().contains(auth);
-    }
 }
