@@ -38,40 +38,25 @@ public class MoTalkSentenceController {
 
 	@RequestMapping(path = "/addSentence", method = RequestMethod.POST)
 	public OperationResp addSentence(@RequestBody MoTalkSentence input) {
-		try {
-			input.setId(null);
-			input.setLike(0);
-			if (input.getLabels() == null) {
-				input.setLabels(new ArrayList<>());
-			}
-			MoTalkSentence result = gsr.save(input);
-			return OperationResp.ok(result.getId());
-		} catch (Exception e) {
-			log.error("保存句子失败", e);
-			return OperationResp.fail(e.getMessage(), null);
+		input.setId(null);
+		input.setLike(0);
+		if (input.getLabels() == null) {
+			input.setLabels(new ArrayList<>());
 		}
+		MoTalkSentence result = gsr.save(input);
+		return OperationResp.ok(result.getId());
 	}
 
 	@RequestMapping(path = "/deleteSentence", method = RequestMethod.POST)
 	public OperationResp deleteSentence(@RequestBody String id) {
-		try {
-			gsr.deleteById(id);
-			return OperationResp.ok(null);
-		} catch (Exception e) {
-			log.error("删除句子失败", e);
-			return OperationResp.fail(e.getMessage(), null);
-		}
+		gsr.deleteById(id);
+		return OperationResp.ok(null);
 	}
 
 	@RequestMapping(path = "/editSentence", method = RequestMethod.POST)
 	public OperationResp editSentence(@RequestBody MoTalkSentence input) {
-		try {
-			MoTalkSentence result = gsr.save(input);
-			return OperationResp.ok(result.getId());
-		} catch (Exception e) {
-			log.error("编辑句子失败", e);
-			return OperationResp.fail(e.getMessage(), null);
-		}
+		MoTalkSentence result = gsr.save(input);
+		return OperationResp.ok(result.getId());
 	}
 
 	@RequestMapping(path = "/getByPage", method = RequestMethod.POST)

@@ -13,5 +13,5 @@ public interface UserDao {
 
 	UserDto getUser(UserParam param);
 
-    List<String> getRoles(@Param("name") String name);
+    List<String> getRoles(@Param("id") Long id);
 }

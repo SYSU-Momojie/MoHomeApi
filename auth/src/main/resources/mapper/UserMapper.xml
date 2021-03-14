@@ -9,11 +9,11 @@
         <result column="motalk_openid" jdbcType="VARCHAR" property="moTalkOpenId"/>
     </resultMap>
 
-    <insert id="create">
+    <insert id="create" parameterType="com.cn.momojie.auth.dto.UserDto">
         INSERT INTO user
-        (unionid)
+        (motalk_openid)
         VALUES
-        (#{unionid})
+        (#{moTalkOpenId})
     </insert>
 
     <select id="getUser" parameterType="com.cn.momojie.auth.param.UserParam" resultMap="UserMap">
@@ -25,13 +25,13 @@
             AND id = #{id}
         </if>
         <if test = "moTalkOpenId != null">
-            AND motalk_open_id = #{moTalkOpenId}
+            AND motalk_openid = #{moTalkOpenId}
         </if>
     </select>
 
     <select id="getRoles" resultType="java.lang.String">
       SELECT role FROM user_role
-      WHERE name = #{name}
+      WHERE user_id = #{id}
     </select>
 
 </mapper>

@@ -24,7 +24,7 @@ public class OperationResp<T> {
 	}
 
 	public static <T> OperationResp ok(T data) {
-		return ok("操作成功");
+		return ok("操作成功", data);
 	}
 
 	public static <T> OperationResp fail(String msg, T data) {

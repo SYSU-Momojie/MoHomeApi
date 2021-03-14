@@ -12,7 +12,9 @@ public class UserInfo {
 
     private String name = "";
 
-    private String wxId;
+    private Long id;
+
+    private String moTalkOpenId;
 
     private List<String> roles = new LinkedList<>();
 

@@ -1,16 +1,14 @@
 package com.cn.momojie.auth.service;
 
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.cn.momojie.auth.constant.WeChatMiniProgram;
 import com.cn.momojie.auth.dao.UserDao;
 import com.cn.momojie.auth.dto.UserDto;
 import com.cn.momojie.auth.param.UserParam;
 import com.cn.momojie.auth.session.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -29,13 +27,16 @@ public class UserService {
 			if (WeChatMiniProgram.MO_TALK.equals(program)) {
 				user.setMoTalkOpenId(openId);
 			}
-			userDao.insert(unionid);
+
+			userDao.create(user);
+			user = userDao.getUser(param);
 		}
 
-		List<String> roles = userDao.getRoles(u);
+		List<String> roles = userDao.getRoles(user.getId());
 
 		UserInfo ui = new UserInfo();
-		ui.setWxId(u);
+		ui.setId(user.getId());
+		ui.setMoTalkOpenId(user.getMoTalkOpenId());
 		ui.setRoles(roles);
 		return ui;
 	}
