@@ -1,10 +1,8 @@
-package com.cn.momojie.es;
+package com.cn.momojie.talk;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cn.momojie.auth.SessionUtil;
 import com.cn.momojie.basic.vo.OperationResp;
 import com.cn.momojie.basic.vo.PageResult;
 import com.cn.momojie.es.param.MoTalkSentenceParam;
@@ -21,6 +20,10 @@ import com.cn.momojie.es.po.MoTalkLabel;
 import com.cn.momojie.es.po.MoTalkSentence;
 import com.cn.momojie.es.repo.MoTalkLabelRepo;
 import com.cn.momojie.es.repo.MoTalkSentenceRepo;
+import com.cn.momojie.talk.constant.SentenceType;
+import com.cn.momojie.talk.dao.UserLikeDao;
+import com.cn.momojie.talk.dto.UserLike;
+import com.cn.momojie.talk.vo.SentenceVo;
 import com.cn.momojie.utils.DateTimeUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +39,14 @@ public class MoTalkSentenceController {
 	@Autowired
 	private MoTalkLabelRepo lr;
 
+	@Autowired
+	private UserLikeDao likeDao;
+
 	@RequestMapping(path = "/addSentence", method = RequestMethod.POST)
 	public OperationResp addSentence(@RequestBody MoTalkSentence input) {
 		input.setId(null);
 		input.setLike(0);
+		input.setDislike(0);
 		if (input.getLabels() == null) {
 			input.setLabels(new ArrayList<>());
 		}
@@ -60,20 +67,38 @@ public class MoTalkSentenceController {
 	}
 
 	@RequestMapping(path = "/getByPage", method = RequestMethod.POST)
-	public PageResult<MoTalkSentence> getByPage(@RequestBody MoTalkSentenceParam param) {
+	public PageResult<SentenceVo> getByPage(@RequestBody MoTalkSentenceParam param) {
+		Page<MoTalkSentence> esResult = null;
 		if (param.getRandom()) {
 			if (param.noLabel()) {
-				return fromRepo(gsr.findRandomly(DateTimeUtils.getCurrentTimestampStr(), getPageParam(param)));
+				esResult = gsr.findRandomly(DateTimeUtils.getCurrentTimestampStr(), getPageParam(param));
 			} else {
-				return fromRepo(gsr.findByLabelsRandomly(param.getLabel(), DateTimeUtils.getCurrentTimestampStr(), getPageParam(param)));
+				esResult = gsr.findByLabelsRandomly(param.getLabel(), DateTimeUtils.getCurrentTimestampStr(), getPageParam(param));
 			}
 		} else {
 			if (param.noLabel()) {
-				return fromRepo(gsr.findByContent(param.getContent(), getPageParam(param)));
+				esResult = gsr.findByContent(param.getContent(), getPageParam(param));
 			} else {
-				return fromRepo(gsr.findByContentAndLabels(param.getContent(), param.getLabel(), getPageParam(param)));
+				esResult = gsr.findByContentAndLabels(param.getContent(), param.getLabel(), getPageParam(param));
 			}
 		}
+
+		List<MoTalkSentence> esList = esResult.getContent();
+
+		PageResult<SentenceVo> ret = new PageResult<>();
+		ret.setTotal(esResult.getTotalElements());
+
+		List<UserLike> likeList = likeDao.getSpecify(SentenceType.SHORT, SessionUtil.getUserId(),
+				esList.stream().map(MoTalkSentence::getId).collect(Collectors.toList()));
+
+		Map<String, UserLike> sidMap = likeList.stream().collect(Collectors.toMap(UserLike::getSentenceId, i->i));
+
+		List<SentenceVo> voList = new LinkedList<>();
+		for (MoTalkSentence es: esList) {
+			voList.add(SentenceVo.fromSentence(es, sidMap.get(es.getId())));
+		}
+		ret.setList(voList);
+		return ret;
 	}
 
 	@RequestMapping(path = "/likeSentence", method = RequestMethod.POST)
@@ -84,6 +109,16 @@ public class MoTalkSentenceController {
 		}
 		result.setLike(result.getLike() + 1);
 		return editSentence(result);
+	}
+
+	@RequestMapping(path = "/getSentenceById", method = RequestMethod.POST)
+	public SentenceVo getSentenceById(@RequestBody String id) {
+		MoTalkSentence es = gsr.findById(id).orElse(null);
+		if (es == null) {
+			return new SentenceVo();
+		}
+		UserLike like = likeDao.getSpecify(SentenceType.SHORT, SessionUtil.getUserId(), Arrays.asList(es.getId())).stream().findFirst().orElse(null);
+		return SentenceVo.fromSentence(es, like);
 	}
 
 	@RequestMapping(path = "/getAllLabels", method = RequestMethod.POST)
@@ -98,12 +133,5 @@ public class MoTalkSentenceController {
 			return PageRequest.of(param.getPageNum(), param.getPageSize());
 		}
 		return PageRequest.of(0, 20);
-	}
-
-	private <T> PageResult<T> fromRepo(Page<T> page) {
-		PageResult<T> result = new PageResult<>();
-		result.setTotal(page.getTotalElements());
-		result.setList(page.getContent());
-		return result;
 	}
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.momojie.talk.dao.UserLikeDao">
+
+    <resultMap id="UserLikeMap" type="com.cn.momojie.talk.dto.UserLike">
+        <result column="sentence_type" jdbcType="VARCHAR" property="sentenceType"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="sentence_id" jdbcType="VARCHAR" property="sentenceId"/>
+        <result column="like" jdbcType="INT" property="like"/>
+        <result column="dislike" jdbcType="INT" property="dislike"/>
+    </resultMap>
+
+    <select id="getSpecify">
+        SELECT
+        FROM user_like
+        WHERE sentence_type = #{sentence_type}
+        AND user_id = #{user_id}
+        AND sentence_id IN
+        <foreach collection="sentence_ids" item="sentence_id" open="(" separator="," close=")">
+            #{sentence_id}
+        </foreach>
+    </select>
+
+</mapper>

@@ -15,6 +15,11 @@ public class SessionUtil {
         return info == null ? "" : info.getName();
     }
 
+	public static Long getUserId() {
+		UserInfo info = USER_INFO.get();
+		return info == null ? 0L : info.getId();
+	}
+
     public static Boolean isLogin() {
         UserInfo info = get();
         return info != null && info.getLogin();

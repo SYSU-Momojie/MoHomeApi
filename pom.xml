@@ -24,6 +24,7 @@
         <module>redis</module>
         <module>utils</module>
         <module>auth</module>
+        <module>talk</module>
         <module>app</module>
 	</modules>
 

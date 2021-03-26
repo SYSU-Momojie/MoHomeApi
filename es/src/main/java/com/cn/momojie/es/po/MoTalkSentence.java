@@ -19,4 +19,6 @@ public class MoTalkSentence {
 	private List<String> labels;
 
 	private Integer like;
+
+	private Integer dislike;
 }
