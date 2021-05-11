@@ -11,7 +11,7 @@ import org.springframework.test.context.web.ServletTestExecutionListener;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext.xml"}, inheritLocations = true)
+@ContextConfiguration(locations = {"classpath:quant-config.xml"}, inheritLocations = true)
 @TestExecutionListeners({ServletTestExecutionListener.class, DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class})
 @Slf4j

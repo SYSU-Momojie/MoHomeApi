@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cn.momojie.moquant.api.constant.MqExcelConst;
-import com.cn.momojie.moquant.api.dto.MqManualIndicator;
+import com.cn.momojie.moquant.api.dto.MqManualMetric;
 import com.cn.momojie.moquant.api.param.manage.NoteEditParam;
 import com.cn.momojie.moquant.api.service.MqManageService;
 import com.cn.momojie.moquant.api.service.MqScriptService;
@@ -51,7 +51,7 @@ public class MqManageController {
 	@RequestMapping(path = "uploadManual", method = RequestMethod.POST)
 	public OperationResp uploadManual(MultipartFile file) {
 		try (InputStream is = file.getInputStream()) {
-			List<MqManualIndicator> inputList = ExcelUtils.getModel(is, MqManualIndicator.class, MqExcelConst.MANUAL_FIELDS);
+			List<MqManualMetric> inputList = ExcelUtils.getModel(is, MqManualMetric.class, MqExcelConst.MANUAL_FIELDS);
 			OperationResp<Map<String, String>> importResult = manageService.manualInput(inputList);
 
 			if (importResult.getSuccess()) {

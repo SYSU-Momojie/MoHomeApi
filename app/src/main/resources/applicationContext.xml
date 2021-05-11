@@ -10,4 +10,5 @@
 
     <import resource="classpath:es-config.xml"/>
     <import resource="classpath:auth-config.xml"/>
+    <import resource="classpath:quant-config.xml"/>
 </beans>

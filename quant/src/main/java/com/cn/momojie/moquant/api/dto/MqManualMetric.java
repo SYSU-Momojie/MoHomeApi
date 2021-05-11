@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("mq_manual_indicator")
-public class MqManualIndicator {
+@TableName("mq_manual_metric")
+public class MqManualMetric {
 
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;

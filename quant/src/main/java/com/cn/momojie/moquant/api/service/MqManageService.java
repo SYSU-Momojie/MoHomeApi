@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cn.momojie.moquant.api.constant.MqIndicatorEnum;
+import com.cn.momojie.moquant.api.constant.MqMetricEnum;
 import com.cn.momojie.moquant.api.constant.MqReportType;
-import com.cn.momojie.moquant.api.dao.MqManualIndicatorDao;
+import com.cn.momojie.moquant.api.dao.MqManualMetricDao;
 import com.cn.momojie.moquant.api.dao.MqShareNoteDao;
 import com.cn.momojie.moquant.api.dao.MqShareNoteRelationDao;
-import com.cn.momojie.moquant.api.dto.MqManualIndicator;
+import com.cn.momojie.moquant.api.dto.MqManualMetric;
 import com.cn.momojie.moquant.api.dto.MqShareNote;
 import com.cn.momojie.moquant.api.dto.MqShareNoteRelation;
 import com.cn.momojie.moquant.api.param.manage.NoteEditParam;
@@ -34,7 +34,7 @@ public class MqManageService {
 	private MqShareNoteRelationDao noteRelationDao;
 
 	@Autowired
-	private MqManualIndicatorDao manualIndicatorDao;
+	private MqManualMetricDao manualMetricDao;
 
 	/**
 	 * 编辑日志
@@ -96,7 +96,7 @@ public class MqManageService {
 		return OperationResp.ok("删除数据成功", null);
 	}
 
-	public OperationResp<Map<String, String>> manualInput(List<MqManualIndicator> inputList) {
+	public OperationResp<Map<String, String>> manualInput(List<MqManualMetric> inputList) {
 		String err = fieldsCheck(inputList);
 		if (err.length() > 0) {
 			return OperationResp.fail(err, null);
@@ -105,9 +105,9 @@ public class MqManageService {
 		StringBuilder sb = new StringBuilder();
 		int rowNum = 2;
 		Map<String, String> codeDateMap = new HashMap<>();
-		for (MqManualIndicator i: inputList) {
+		for (MqManualMetric i: inputList) {
 			try {
-				manualIndicatorDao.insert(i);
+				manualMetricDao.insert(i);
 				String code = i.getTsCode();
 				String date = i.getUpdateDate();
 				if (!codeDateMap.containsKey(code)) {
@@ -130,12 +130,12 @@ public class MqManageService {
 		}
 	}
 
-	private String fieldsCheck(List<MqManualIndicator> inputList) {
+	private String fieldsCheck(List<MqManualMetric> inputList) {
 		StringBuilder sb = new StringBuilder();
 		SimpleDateFormat updateDate = new SimpleDateFormat("yyyyMMdd");
 
 		int i = 2;
-		for (MqManualIndicator mi: inputList) {
+		for (MqManualMetric mi: inputList) {
 			StringBuilder row = new StringBuilder();
 			if (StringUtils.isEmpty(mi.getTsCode())) {
 				row.append("TS代码为空;");
@@ -187,7 +187,7 @@ public class MqManageService {
 				row.append("不合法的类型;");
 			}
 
-			if (!MqIndicatorEnum.valid(mi.getName())) {
+			if (!MqMetricEnum.valid(mi.getName())) {
 				row.append("不合法的指标;");
 			}
 

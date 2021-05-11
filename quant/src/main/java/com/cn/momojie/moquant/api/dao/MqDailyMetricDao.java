@@ -5,17 +5,16 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.cn.momojie.moquant.api.dto.MqDailyIndicator;
-import com.cn.momojie.moquant.api.dto.MqShareAll;
+import com.cn.momojie.moquant.api.dto.MqDailyMetric;
 import com.cn.momojie.moquant.api.param.MqShareListParam;
 
-public interface MqDailyIndicatorDao {
+public interface MqDailyMetricDao {
 
     List<String> getScoreList(MqShareListParam param);
 
-    List<MqDailyIndicator> getDailyLatest(@Param("codeList") Collection<String> codeList,
+    List<MqDailyMetric> getDailyLatest(@Param("codeList") Collection<String> codeList,
 			@Param("nameList") Collection<String> nameList,
 			@Param("underDate") String underDate);
 
-    List<MqDailyIndicator> getTrend(@Param("code") String tsCode, @Param("name") String name);
+    List<MqDailyMetric> getTrend(@Param("code") String tsCode, @Param("name") String name);
 }

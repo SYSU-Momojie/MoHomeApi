@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class MqQuarterIndicator {
+public class MqDailyMetric {
 
 	private String tsCode;
+
+	private String updateDate;
 
 	private String period;
 
@@ -16,10 +18,4 @@ public class MqQuarterIndicator {
 	private String name;
 
 	private BigDecimal value;
-
-	private BigDecimal yoy;
-
-	private BigDecimal mom;
-
-	private String updateDate;
 }

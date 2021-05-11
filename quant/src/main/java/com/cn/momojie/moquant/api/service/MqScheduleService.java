@@ -26,7 +26,7 @@ public class MqScheduleService {
 		log.info("Schedule service is alive");
 	}
 
-	@Scheduled(cron = "0 59 15,17,19,21,23 * * *")
+	@Scheduled(cron = "0 59 17 * * *")
 	public void dailyUpdate() {
 		if (!isOn("daily_update")) {
 			log.info("跳过 daily_update");

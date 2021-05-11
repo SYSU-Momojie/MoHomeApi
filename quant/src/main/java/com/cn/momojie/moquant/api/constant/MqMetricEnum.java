@@ -1,7 +1,7 @@
 package com.cn.momojie.moquant.api.constant;
 
 
-public enum MqIndicatorEnum {
+public enum MqMetricEnum {
 
     PE(true, "pe"),
     PB(true, "pb"),
@@ -26,13 +26,13 @@ public enum MqIndicatorEnum {
 
     public String name;
 
-    MqIndicatorEnum(Boolean isDaily, String name) {
+    MqMetricEnum(Boolean isDaily, String name) {
         this.isDaily = isDaily;
         this.name = name;
     }
 
-    public static MqIndicatorEnum fromName(String name) {
-        for (MqIndicatorEnum i: values()) {
+    public static MqMetricEnum fromName(String name) {
+        for (MqMetricEnum i: values()) {
             if (i.name.equals(name)) {
                 return i;
             }

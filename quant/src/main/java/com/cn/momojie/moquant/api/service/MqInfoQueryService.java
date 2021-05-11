@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.cn.momojie.basic.vo.PageResult;
-import com.cn.momojie.moquant.api.constant.MqIndicatorEnum;
+import com.cn.momojie.moquant.api.constant.MqMetricEnum;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +35,10 @@ public class MqInfoQueryService {
 	private TsForecastDao tsForecastDao;
 
     @Autowired
-    private MqDailyIndicatorDao dailyIndicatorDao;
+    private MqDailyMetricDao dailyMetricDao;
 
     @Autowired
-    private MqQuarterIndicatorDao quarterIndicatorDao;
+    private MqQuarterMetricDao quarterMetricDao;
 
     @Autowired
     private MqShareNoteDao noteDao;
@@ -53,13 +53,13 @@ public class MqInfoQueryService {
     public PageResult getGrowList(MqShareListParam param) {
     	param.setUnderDate(DateTimeUtils.getTodayDt());
     	param.setScoreBy("grow_score");
-		List<String> codeList = dailyIndicatorDao.getScoreList(param);
+		List<String> codeList = dailyMetricDao.getScoreList(param);
 		PageResult<MqShareAll> result = new PageResult<>();
 		result.setTotal(Long.valueOf(codeList.size()));
 
 		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyIndicator>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe"));
-		Map<String, Map<String, MqQuarterIndicator>> quarterMap = getQuarterLatest(codeList, Arrays.asList("revenue_quarter", "dprofit_quarter"));
+		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe"));
+		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, Arrays.asList("revenue_quarter", "dprofit_quarter"));
 
 		List<MqShareAll> pageList = new ArrayList<>(codeList.size());
 
@@ -74,8 +74,8 @@ public class MqInfoQueryService {
 				all.setShareName(basic.getName());
 			}
 
-			all.setDailyIndicators(dailyMap.getOrDefault(tsCode, new HashMap<>()));
-			all.setQuarterIndicators(quarterMap.getOrDefault(tsCode, new HashMap<>()));
+			all.setDailyMetric(dailyMap.getOrDefault(tsCode, new HashMap<>()));
+			all.setQuarterMetric(quarterMap.getOrDefault(tsCode, new HashMap<>()));
 			pageList.add(all);
 		}
 		result.setList(pageList);
@@ -86,13 +86,13 @@ public class MqInfoQueryService {
 	public PageResult getValList(MqShareListParam param) {
 		param.setUnderDate(DateTimeUtils.getTodayDt());
 		param.setScoreBy("val_score");
-		List<String> codeList = dailyIndicatorDao.getScoreList(param);
+		List<String> codeList = dailyMetricDao.getScoreList(param);
 		PageResult<MqShareAll> result = new PageResult<>();
 		result.setTotal(Long.valueOf(codeList.size()));
 
 		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyIndicator>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe", "pb", "dividend_yields"));
-		Map<String, Map<String, MqQuarterIndicator>> quarterMap = getQuarterLatest(codeList, Arrays.asList(""));
+		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe", "pb", "dividend_yields"));
+		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, Arrays.asList(""));
 
 		List<MqShareAll> pageList = new ArrayList<>(codeList.size());
 
@@ -107,8 +107,8 @@ public class MqInfoQueryService {
 				all.setShareName(basic.getName());
 			}
 
-			all.setDailyIndicators(dailyMap.getOrDefault(tsCode, new HashMap<>()));
-			all.setQuarterIndicators(quarterMap.getOrDefault(tsCode, new HashMap<>()));
+			all.setDailyMetric(dailyMap.getOrDefault(tsCode, new HashMap<>()));
+			all.setQuarterMetric(quarterMap.getOrDefault(tsCode, new HashMap<>()));
 			pageList.add(all);
 		}
 
@@ -130,42 +130,42 @@ public class MqInfoQueryService {
 		return result;
 	}
 
-	private Map<String, Map<String, MqDailyIndicator>> getDailyLatest(Collection<String> codeList, Collection<String> nameList) {
-		Map<String, Map<String, MqDailyIndicator>> codeNameMap = new HashMap<>();
+	private Map<String, Map<String, MqDailyMetric>> getDailyLatest(Collection<String> codeList, Collection<String> nameList) {
+		Map<String, Map<String, MqDailyMetric>> codeNameMap = new HashMap<>();
 		if (CollectionUtils.isEmpty(codeList)) {
 			return codeNameMap;
 		}
 
-		List<MqDailyIndicator> indicatorList = dailyIndicatorDao.getDailyLatest(codeList, nameList,
+		List<MqDailyMetric> metricList = dailyMetricDao.getDailyLatest(codeList, nameList,
 				DateTimeUtils.getTodayDt());
-		for (MqDailyIndicator i: indicatorList) {
+		for (MqDailyMetric i: metricList) {
 			String tsCode = i.getTsCode();
 			String name = i.getName();
 			if (!codeNameMap.containsKey(tsCode)) {
 				codeNameMap.put(tsCode, new HashMap<>());
 			}
-			Map<String, MqDailyIndicator> nameMap = codeNameMap.get(tsCode);
+			Map<String, MqDailyMetric> nameMap = codeNameMap.get(tsCode);
 			nameMap.put(name, i);
 		}
 
 		return codeNameMap;
 	}
 
-	private Map<String, Map<String, MqQuarterIndicator>> getQuarterLatest(Collection<String> codeList, Collection<String> nameList) {
-		Map<String, Map<String, MqQuarterIndicator>> codeNameMap = new HashMap<>();
+	private Map<String, Map<String, MqQuarterMetric>> getQuarterLatest(Collection<String> codeList, Collection<String> nameList) {
+		Map<String, Map<String, MqQuarterMetric>> codeNameMap = new HashMap<>();
 		if (CollectionUtils.isEmpty(codeList)) {
 			return codeNameMap;
 		}
 
-		List<MqQuarterIndicator> indicatorList = quarterIndicatorDao.getQuarterLatest(codeList, nameList,
+		List<MqQuarterMetric> metricList = quarterMetricDao.getQuarterLatest(codeList, nameList,
 				DateTimeUtils.getTodayDt(), DateTimeUtils.getDtFromDelta(-365));
-		for (MqQuarterIndicator i: indicatorList) {
+		for (MqQuarterMetric i: metricList) {
 			String tsCode = i.getTsCode();
 			String name = i.getName();
 			if (!codeNameMap.containsKey(tsCode)) {
 				codeNameMap.put(tsCode, new HashMap<>());
 			}
-			Map<String, MqQuarterIndicator> nameMap = codeNameMap.get(tsCode);
+			Map<String, MqQuarterMetric> nameMap = codeNameMap.get(tsCode);
 			nameMap.put(name, i);
 		}
 
@@ -176,8 +176,8 @@ public class MqInfoQueryService {
 		List<String> codeList = Arrays.asList(tsCode);
 
 		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyIndicator>> dailyMap = getDailyLatest(codeList, null);
-		Map<String, Map<String, MqQuarterIndicator>> quarterMap = getQuarterLatest(codeList, null);
+		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, null);
+		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, null);
 
 		MqShareAll all = new MqShareAll();
 		all.setTsCode(tsCode);
@@ -189,8 +189,8 @@ public class MqInfoQueryService {
 			all.setShareName(basic.getName());
 		}
 
-		all.setDailyIndicators(dailyMap.getOrDefault(tsCode, new HashMap<>()));
-		all.setQuarterIndicators(quarterMap.getOrDefault(tsCode, new HashMap<>()));
+		all.setDailyMetric(dailyMap.getOrDefault(tsCode, new HashMap<>()));
+		all.setQuarterMetric(quarterMap.getOrDefault(tsCode, new HashMap<>()));
 
     	return all;
     }
@@ -198,20 +198,20 @@ public class MqInfoQueryService {
 	public MqShareTrend getTrend(MqTrendParam input) {
 		MqShareTrend trend = new MqShareTrend();
 
-		MqIndicatorEnum i = MqIndicatorEnum.fromName(input.getIndicatorName());
+		MqMetricEnum i = MqMetricEnum.fromName(input.getMetricName());
 		if (i == null) {
 			log.error("找不到对应的指标");
 			return trend;
 		}
 
 		if (i.isDaily) {
-			List<MqDailyIndicator> list = dailyIndicatorDao.getTrend(input.getTsCode(), i.name);
-			for (MqDailyIndicator mdi: list) {
+			List<MqDailyMetric> list = dailyMetricDao.getTrend(input.getTsCode(), i.name);
+			for (MqDailyMetric mdi: list) {
 				addToTrend(trend, mdi.getUpdateDate(), mdi.getValue(), null);
 			}
 		} else {
-			List<MqQuarterIndicator> list = quarterIndicatorDao.getTrend(input.getTsCode(), i.name);
-			for (MqQuarterIndicator mqi: list) {
+			List<MqQuarterMetric> list = quarterMetricDao.getTrend(input.getTsCode(), i.name);
+			for (MqQuarterMetric mqi: list) {
 				addToTrend(trend, DateTimeUtils.convertToQuarter(mqi.getPeriod()), mqi.getValue(), mqi.getYoy());
 			}
 		}
@@ -282,13 +282,13 @@ public class MqInfoQueryService {
 	public MqForecastInfo getForecastInfo(String code) {
 		MqForecastInfo info = new MqForecastInfo();
 
-		Map<String, Map<String, MqQuarterIndicator>> codeNameMap = getQuarterLatest(Arrays.asList(code), Arrays.asList("nprofit", "dprofit"));
-		Map<String, MqQuarterIndicator> nameMap = codeNameMap.get(code);
+		Map<String, Map<String, MqQuarterMetric>> codeNameMap = getQuarterLatest(Arrays.asList(code), Arrays.asList("nprofit", "dprofit"));
+		Map<String, MqQuarterMetric> nameMap = codeNameMap.get(code);
 		if (nameMap == null) {
 			return info;
 		}
 
-		MqQuarterIndicator nprofit = nameMap.get("nprofit");
+		MqQuarterMetric nprofit = nameMap.get("nprofit");
 		if (nprofit == null) {
 			return info;
 		}
@@ -315,7 +315,7 @@ public class MqInfoQueryService {
 			info.setNprofit(nprofit.getValue());
 		}
 
-		MqQuarterIndicator dprofit = nameMap.get("dprofit");
+		MqQuarterMetric dprofit = nameMap.get("dprofit");
 		if (dprofit != null && dprofit.getValue() != null) {
 			info.setDprofit(dprofit.getValue());
 		}
