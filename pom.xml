@@ -19,10 +19,10 @@
 	<modules>
         <module>basic</module>
         <module>es</module>
-		<module>quant</module>
-		<module>blog</module>
         <module>redis</module>
         <module>utils</module>
+		<module>quant</module>
+		<module>blog</module>
         <module>auth</module>
         <module>talk</module>
         <module>app</module>

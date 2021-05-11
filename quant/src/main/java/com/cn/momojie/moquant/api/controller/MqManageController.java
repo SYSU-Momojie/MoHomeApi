@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/manage")
+@RequestMapping("/quant/manage")
 public class MqManageController {
 
 	@Autowired
