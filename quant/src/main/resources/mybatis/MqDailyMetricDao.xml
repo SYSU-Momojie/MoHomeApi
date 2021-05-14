@@ -23,6 +23,7 @@
             MAX(update_date) as update_date
             FROM mq_daily_metric
             WHERE update_date <![CDATA[ <= ]]> #{underDate}
+            AND name=#{scoreBy}
             GROUP BY ts_code
         ) gp
         ON o.ts_code = gp.ts_code AND o.update_date = gp.update_date
@@ -54,5 +55,5 @@
         WHERE ts_code = #{code} AND name = #{name}
         ORDER BY update_date ASC
     </select>
-
+    
 </mapper>

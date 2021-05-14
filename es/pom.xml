@@ -5,7 +5,6 @@
 
     <groupId>com.cn.momojie</groupId>
     <artifactId>mo-es</artifactId>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.cn.momojie</groupId>
