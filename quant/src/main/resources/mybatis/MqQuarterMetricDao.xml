@@ -25,7 +25,7 @@
                 SELECT ts_code, name,
                 max(period) AS period
                 FROM mq_quarter_metric
-                WHERE update_date <![CDATA[ <= ]]> #{underDate} AND update_date <![CDATA[ >= ]]> #{lastYear}
+                WHERE update_date <![CDATA[ <= ]]> #{underDate}
                 AND ts_code IN <foreach collection="codeList" item="codeI" open="(" separator="," close=")">#{codeI}</foreach>
                 <if test="nameList != null and nameList.size > 0">
                     AND name IN <foreach collection="nameList" item="nameI" open="(" separator="," close=")">#{nameI}</foreach>

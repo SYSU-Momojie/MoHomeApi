@@ -1,5 +1,6 @@
 package com.cn.momojie.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,6 +31,19 @@ public class DateTimeUtils {
 		return getDt(c.getTime());
 	}
 
+	public static String getDtFromDelta(String dt, Integer dayDelta) {
+    	if (!validDt(dt)) {
+    		return null;
+		}
+    	Integer year = Integer.valueOf(dt.substring(0, 4));
+    	Integer month = Integer.valueOf(dt.substring(4, 6));
+    	Integer day = Integer.valueOf(dt.substring(6, 8));
+		Calendar c = Calendar.getInstance();
+		c.set(year, month - 1, day);
+		c.add(Calendar.DATE, dayDelta);
+		return getDt(c.getTime());
+	}
+
     public static String convertToQuarter(String period) {
     	try {
 			Integer year = Integer.valueOf(period.substring(0, 4));
@@ -53,5 +67,15 @@ public class DateTimeUtils {
 
 	public static String getCurrentTimestampStr() {
 		return String.valueOf(Calendar.getInstance().getTimeInMillis());
+	}
+
+	public static Boolean validDt(String dt) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		try {
+			sdf.parse(dt);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

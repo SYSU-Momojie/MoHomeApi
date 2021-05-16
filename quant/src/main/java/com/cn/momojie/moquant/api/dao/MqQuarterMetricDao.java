@@ -11,8 +11,7 @@ public interface MqQuarterMetricDao {
 
 	List<MqQuarterMetric> getQuarterLatest(@Param("codeList") Collection<String> codeList,
 			@Param("nameList") Collection<String> nameList,
-			@Param("underDate") String underDate,
-			@Param("lastYear") String lastYear);
+			@Param("underDate") String underDate);
 
 	List<MqQuarterMetric> getTrend(@Param("code") String tsCode, @Param("name") String name);
 }

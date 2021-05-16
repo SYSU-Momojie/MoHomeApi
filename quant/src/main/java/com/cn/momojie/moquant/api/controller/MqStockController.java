@@ -25,21 +25,6 @@ public class MqStockController {
     @Autowired
     private MqInfoQueryService mqInfoQueryService;
 
-    @RequestMapping(path = "getPageList", method = RequestMethod.POST)
-    public PageResult getPageList(@RequestBody DailyBasicParam param) {
-        return mqInfoQueryService.getLatestListByOrder(param);
-    }
-
-    @RequestMapping(path = "getGrowList", method = RequestMethod.POST)
-    public PageResult getGrowList(@RequestBody MqShareListParam param) {
-        return mqInfoQueryService.getGrowList(param);
-    }
-
-    @RequestMapping(path = "getValList", method = RequestMethod.POST)
-    public PageResult getValList(@RequestBody MqShareListParam param) {
-        return mqInfoQueryService.getValList(param);
-    }
-
     @RequestMapping(path = "getLatestByCode", method = RequestMethod.POST)
     public MqShareAll getLatestByCode(@RequestBody String tsCode) {
         return mqInfoQueryService.getLatestByCode(tsCode);

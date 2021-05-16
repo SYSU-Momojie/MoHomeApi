@@ -35,149 +35,20 @@ public class MqInfoQueryService {
 	private TsForecastDao tsForecastDao;
 
     @Autowired
-    private MqDailyMetricDao dailyMetricDao;
-
-    @Autowired
-    private MqQuarterMetricDao quarterMetricDao;
-
-    @Autowired
     private MqShareNoteDao noteDao;
 
     @Autowired
     private MqMessageDao messageDao;
 
-    public PageResult getLatestListByOrder(DailyBasicParam param) {
-        return null;
-    }
-
-    public PageResult getGrowList(MqShareListParam param) {
-    	param.setUnderDate(DateTimeUtils.getTodayDt());
-    	param.setScoreBy("grow_score");
-		List<String> codeList = dailyMetricDao.getScoreList(param);
-		PageResult<MqShareAll> result = new PageResult<>();
-		result.setTotal(Long.valueOf(codeList.size()));
-
-		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe"));
-		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, Arrays.asList("revenue_quarter", "dprofit_quarter"));
-
-		List<MqShareAll> pageList = new ArrayList<>(codeList.size());
-
-		for (String tsCode: codeList) {
-			MqShareAll all = new MqShareAll();
-			all.setTsCode(tsCode);
-
-			TsBasic basic = basicMap.get(tsCode);
-			if (basic == null) {
-				log.error("Can't find ts_basic of {}", tsCode);
-			} else {
-				all.setShareName(basic.getName());
-			}
-
-			all.setDailyMetric(dailyMap.getOrDefault(tsCode, new HashMap<>()));
-			all.setQuarterMetric(quarterMap.getOrDefault(tsCode, new HashMap<>()));
-			pageList.add(all);
-		}
-		result.setList(pageList);
-
-		return result;
-	}
-
-	public PageResult getValList(MqShareListParam param) {
-		param.setUnderDate(DateTimeUtils.getTodayDt());
-		param.setScoreBy("val_score");
-		List<String> codeList = dailyMetricDao.getScoreList(param);
-		PageResult<MqShareAll> result = new PageResult<>();
-		result.setTotal(Long.valueOf(codeList.size()));
-
-		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, Arrays.asList("pe", "pb", "dividend_yields"));
-		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, Arrays.asList(""));
-
-		List<MqShareAll> pageList = new ArrayList<>(codeList.size());
-
-		for (String tsCode: codeList) {
-			MqShareAll all = new MqShareAll();
-			all.setTsCode(tsCode);
-
-			TsBasic basic = basicMap.get(tsCode);
-			if (basic == null) {
-				log.error("Can't find ts_basic of {}", tsCode);
-			} else {
-				all.setShareName(basic.getName());
-			}
-
-			all.setDailyMetric(dailyMap.getOrDefault(tsCode, new HashMap<>()));
-			all.setQuarterMetric(quarterMap.getOrDefault(tsCode, new HashMap<>()));
-			pageList.add(all);
-		}
-
-		result.setList(pageList);
-		return result;
-	}
-
-	private Map<String, TsBasic> getBasicMap(Collection<String> codeList) {
-		Map<String, TsBasic> result = new HashMap<>();
-		if (CollectionUtils.isEmpty(codeList)) {
-			return result;
-		}
-
-		List<TsBasic> basicList = tsBasicDao.selectByCodes(codeList);
-		for (TsBasic basic: basicList) {
-			result.put(basic.getTsCode(), basic);
-		}
-
-		return result;
-	}
-
-	private Map<String, Map<String, MqDailyMetric>> getDailyLatest(Collection<String> codeList, Collection<String> nameList) {
-		Map<String, Map<String, MqDailyMetric>> codeNameMap = new HashMap<>();
-		if (CollectionUtils.isEmpty(codeList)) {
-			return codeNameMap;
-		}
-
-		List<MqDailyMetric> metricList = dailyMetricDao.getDailyLatest(codeList, nameList,
-				DateTimeUtils.getTodayDt());
-		for (MqDailyMetric i: metricList) {
-			String tsCode = i.getTsCode();
-			String name = i.getName();
-			if (!codeNameMap.containsKey(tsCode)) {
-				codeNameMap.put(tsCode, new HashMap<>());
-			}
-			Map<String, MqDailyMetric> nameMap = codeNameMap.get(tsCode);
-			nameMap.put(name, i);
-		}
-
-		return codeNameMap;
-	}
-
-	private Map<String, Map<String, MqQuarterMetric>> getQuarterLatest(Collection<String> codeList, Collection<String> nameList) {
-		Map<String, Map<String, MqQuarterMetric>> codeNameMap = new HashMap<>();
-		if (CollectionUtils.isEmpty(codeList)) {
-			return codeNameMap;
-		}
-
-		List<MqQuarterMetric> metricList = quarterMetricDao.getQuarterLatest(codeList, nameList,
-				DateTimeUtils.getTodayDt(), DateTimeUtils.getDtFromDelta(-365));
-		for (MqQuarterMetric i: metricList) {
-			String tsCode = i.getTsCode();
-			String name = i.getName();
-			if (!codeNameMap.containsKey(tsCode)) {
-				codeNameMap.put(tsCode, new HashMap<>());
-			}
-			Map<String, MqQuarterMetric> nameMap = codeNameMap.get(tsCode);
-			nameMap.put(name, i);
-		}
-
-		return codeNameMap;
-	}
+    @Autowired
+	private MqMetricService metricService;
 
     public MqShareAll getLatestByCode(String tsCode) {
 		List<String> codeList = Arrays.asList(tsCode);
 
-		Map<String, TsBasic> basicMap = getBasicMap(codeList);
-		Map<String, Map<String, MqDailyMetric>> dailyMap = getDailyLatest(codeList, null);
-		Map<String, Map<String, MqQuarterMetric>> quarterMap = getQuarterLatest(codeList, null);
+		Map<String, TsBasic> basicMap = metricService.getBasicMap(codeList);
+		Map<String, Map<String, MqDailyMetric>> dailyMap = metricService.getLatestDailyMetric(codeList, null);
+		Map<String, Map<String, MqQuarterMetric>> quarterMap = metricService.getLatestQuarterMetric(codeList, null);
 
 		MqShareAll all = new MqShareAll();
 		all.setTsCode(tsCode);
@@ -205,12 +76,12 @@ public class MqInfoQueryService {
 		}
 
 		if (i.isDaily) {
-			List<MqDailyMetric> list = dailyMetricDao.getTrend(input.getTsCode(), i.name);
+			List<MqDailyMetric> list = metricService.getDailyOrderByDateAsc(input.getTsCode(), i.name);
 			for (MqDailyMetric mdi: list) {
 				addToTrend(trend, mdi.getUpdateDate(), mdi.getValue(), null);
 			}
 		} else {
-			List<MqQuarterMetric> list = quarterMetricDao.getTrend(input.getTsCode(), i.name);
+			List<MqQuarterMetric> list = metricService.getQuarterByPeriodAsc(input.getTsCode(), i.name);
 			for (MqQuarterMetric mqi: list) {
 				addToTrend(trend, DateTimeUtils.convertToQuarter(mqi.getPeriod()), mqi.getValue(), mqi.getYoy());
 			}
@@ -282,7 +153,7 @@ public class MqInfoQueryService {
 	public MqForecastInfo getForecastInfo(String code) {
 		MqForecastInfo info = new MqForecastInfo();
 
-		Map<String, Map<String, MqQuarterMetric>> codeNameMap = getQuarterLatest(Arrays.asList(code), Arrays.asList("nprofit", "dprofit"));
+		Map<String, Map<String, MqQuarterMetric>> codeNameMap = metricService.getLatestQuarterMetric(Arrays.asList(code), Arrays.asList("nprofit", "dprofit"));
 		Map<String, MqQuarterMetric> nameMap = codeNameMap.get(code);
 		if (nameMap == null) {
 			return info;
