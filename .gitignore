@@ -2,3 +2,4 @@
 *.iml
 **/target/
 api.log
+app*.log

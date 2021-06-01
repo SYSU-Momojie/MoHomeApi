@@ -17,3 +17,10 @@ logging:
   level:
     org.springframework.web: ERROR
     com.cn.momojie: INFO
+  file:
+    path: ${APP_LOG_PATH}
+    name: app.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: app-%d{yyyy-MM-dd}.%i.log
+
