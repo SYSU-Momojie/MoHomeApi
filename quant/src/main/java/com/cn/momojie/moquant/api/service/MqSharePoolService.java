@@ -34,7 +34,7 @@ public class MqSharePoolService {
     }
 
     public PageResult<MqShareAll> getDownGapList(MqSharePoolParam param) {
-        return getStrategyList("down_gap", Arrays.asList("mv", "pe", "pb"), Arrays.asList(""));
+        return getStrategyList("down_gap", Arrays.asList("total_mv", "pe", "pb"), Arrays.asList(""));
     }
 
     public PageResult<MqShareAll> getStrategyList(String strategy,
