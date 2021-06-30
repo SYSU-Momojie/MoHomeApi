@@ -25,6 +25,13 @@ public class RedisClient {
 		}
 	}
 
+	public Boolean exists(String key) {
+		byte[] k = stringSerializer.serialize(key);
+		try (RedisConnection conn = getConnection()) {
+			return conn.exists(k);
+		}
+	}
+
 	public Boolean setNX(String key, String value, int seconds) {
 		byte[] k = stringSerializer.serialize(key);
 		byte[] v = stringSerializer.serialize(value);

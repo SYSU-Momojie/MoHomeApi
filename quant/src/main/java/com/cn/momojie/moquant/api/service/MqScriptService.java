@@ -42,6 +42,17 @@ public class MqScriptService {
 		return r;
 	}
 
+	public int fetchLatest() {
+		Boolean flag = redisClient.exists("fetch_daily");
+		if (flag) {
+			log.info("每日更新未结束，等待下轮运行获取最新财报");
+			return 0;
+		}
+		String args = String.format("--job fetch_latest");
+		int r = commonExecute(args);
+		return r;
+	}
+
 	public void recalculateFrom(Map<String, String> codeDateMap) {
 		List<Future> resultList = new ArrayList<>();
 		for (String tsCode: codeDateMap.keySet()) {

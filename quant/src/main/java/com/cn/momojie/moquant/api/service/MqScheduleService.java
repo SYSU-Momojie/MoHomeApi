@@ -40,6 +40,21 @@ public class MqScheduleService {
 		}
 	}
 
+	@Scheduled(cron = "0 59 0-8,18-23 * * *")
+	public void fetchLatest() {
+		if (!isOn("fetch_latest")) {
+			log.info("跳过 fetch_latest");
+			return ;
+		}
+
+		Future<Integer> f = ThreadPoolUtils.getPythonPool().submit( () -> scriptService.fetchLatest());
+		try {
+			f.get(1, TimeUnit.HOURS);
+		} catch (Exception e) {
+			log.error("定时任务 fetchLatest 出错", e);
+		}
+	}
+
 	private Boolean isOn(String job) {
 		String key = String.format("SCHEDULE_%s", job.toUpperCase());
 		return "1".equals(paramService.getString(key));
